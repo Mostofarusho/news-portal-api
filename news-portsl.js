@@ -34,7 +34,7 @@ const showAllNews = (data, category_name) => {
   const newsContainer = document.getElementById('all-news');
   newsContainer.innerHTML = '';
   data.forEach(singleNews => {
-    const { _id, image_url, title, details, author, total_view } = singleNews;
+    const { _id, image_url, title, details, author, total_view, rating } = singleNews;
     // newsContainer.innerHTML+=``
     const card = document.createElement('div');
     card.classList.add('card', 'mb-3')
@@ -62,8 +62,9 @@ const showAllNews = (data, category_name) => {
             <p class="m-0 p-0">${total_view ? total_view : "Not Available"}</p>
 
             </div>
-            <div>
-            <i class="fas fa-star"></i>
+            <div class="d-flex gap-2">
+           ${generateStars(rating.number)}
+            <p>${rating.number}</P>
             </div>
             <div>
             <i class="fas fa-arrow-right" onclick="fetchNewsDetail('${_id}')" 
@@ -118,6 +119,10 @@ const showNewsDetail = newsDetail => {
       </div>
       <div>
       <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
       </div>
      
       </div>
@@ -128,14 +133,27 @@ const showNewsDetail = newsDetail => {
 }
 //show trending news
 const showTrending = () => {
-  const treandingNews=fetchData.filter(singleData=>singleData.others_info.is_trending===true);
-  const category_name=document.getElementById('category-name').innerText;
+  const treandingNews = fetchData.filter(singleData => singleData.others_info.is_trending === true);
+  const category_name = document.getElementById('category-name').innerText;
   console.log(treandingNews);
-  showAllNews(treandingNews,category_name);
+  showAllNews(treandingNews, category_name);
 }
 const showTodaysPick = () => {
-  const todaysNews=fetchData.filter(singleData=>singleData.others_info.is_todays_pick===true);
-  const category_name=document.getElementById('category-name').innerText;
+  const todaysNews = fetchData.filter(singleData => singleData.others_info.is_todays_pick === true);
+  const category_name = document.getElementById('category-name').innerText;
   console.log(todaysNews);
-  showAllNews(todaysNews,category_name);
+  showAllNews(todaysNews, category_name);
+}
+
+//optional 
+//generate stars
+const generateStars = rating => {
+  let ratingHTML = '';
+  for (let i = 1; i <= Math.floor(rating); i++) {
+    ratingHTML += `<i class="fas fa-star"></i>`;
+  }
+  if (rating - Math.floor(rating) > 0) {
+    ratingHTML += `<i class="fas fa-star-half"></i>`;
+  }
+  return ratingHTML;
 }
